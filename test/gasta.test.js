@@ -25,12 +25,10 @@ describe('gasta', function () {
     }
   })
 
-  it('readme', async () => {
-  })
+  it('readme', async () => {})
 
   it('happy', async () => {
     let g0 = Gasta()
     expect(g0).exists()
   })
-
 })

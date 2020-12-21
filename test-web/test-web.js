@@ -1,6 +1,6 @@
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.Inks = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.Gasta = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 (function (global){(function (){
-!function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{("undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self?self:this).Inks=e()}}((function(){var define,module,exports,_$Inks_1=Inks;const default_options={exclude:()=>!1};function Inks(e,n,l=default_options){return walk("$",e,make_modify_property(n,l),l)}let walkers={string:(e,n,l)=>l(e,n),object:(e,n,l,t)=>{if(null==n||t.exclude(e,n))return n;var r={};return Object.keys(n).forEach(e=>{r[e]=walk(e,n[e],l,t)}),r},array:(e,n,l,t)=>{for(var r=[],u=0;u<n.length;u++)r.push(walk(""+u,n[u],l,t));return r},number:(e,n,l)=>n,bigint:(e,n,l)=>n,boolean:(e,n,l)=>n,symbol:(e,n,l)=>n,function:(e,n,l)=>n,any:(e,n,l)=>n};function walk(e,n,l,t){let r=Array.isArray(n)?"array":typeof n;return(walkers[r]||walkers.any)(e,n,l,t)}function make_modify_property(e,n){return function(l,t){return n.exclude(l,t)?t:replace_values(t,e)}}function replace_values(e,n){e=e.replace(/\\`/g,"\x07");var l=null;let t=null;for(var r=[],u=0;t=e.substring(u).match(/(`.*?`)/);){var a=t[0].substring(1,t[0].length-1);let p=t.index;var o;if(""!==(l=e.substring(u,u+p))&&r.push(l),u=u+p+t[0].length,o=a.match(/^([^:]+):(.*)$/)){var s=o[1],f=o[2],i=n&&n[s];"object"==typeof i?r.push(handle_eval("$obj."+f,i,n)):r.push(null)}else r.push(handle_eval(a,null,n))}""!==(l=e.substring(u,e.length))&&r.push(l);var p=null;return"string"==typeof(p=1===r.length?r[0]:(r=r.map(e=>"string"==typeof e||"number"==typeof e?e:JSON.stringify(e))).join(""))&&(p=p.replace(/\x07/g,"`")),p}function handle_eval($vstr,$obj,$){var $val=null;return eval("$val = "+$vstr),null==$val?null:$val}return _$Inks_1}));
+!function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{("undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self?self:this).Gasta=e()}}((function(){class e{constructor(...e){}}return function(){return new e(...arguments)}}));
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],2:[function(require,module,exports){
 (function (Buffer,__dirname){(function (){
@@ -6615,7 +6615,7 @@ module.exports = function whichTypedArray(value) {
 
 const Fs = require('fs')
 
-const Inks = require('..')
+const Gasta = require('..')
 
 let Lab = require('@hapi/lab')
 Lab = null != Lab.script ? Lab : require('hapi-lab-shim')
@@ -6627,139 +6627,21 @@ const describe = lab.describe
 const it = lab.it
 const expect = Code.expect
 
-describe('inks', function () {
+describe('gasta', function () {
   it('compiled', async () => {
     if ('undefined' === typeof window) {
       expect(
-        Fs.statSync(__dirname + '/../inks.ts').mtimeMs,
+        Fs.statSync(__dirname + '/../gasta.ts').mtimeMs,
         'TYPESCRIPT COMPILATION FAILED - SEE WATCH'
-      ).most(Fs.statSync(__dirname + '/../dist/inks.js').mtimeMs)
+      ).most(Fs.statSync(__dirname + '/../dist/gasta.js').mtimeMs)
     }
   })
 
-  it('readme', async () => {
-    var out = Inks('`foo:bar`', { foo: { bar: 'zed' } })
-    expect(out).equal('zed')
-
-    out = Inks({ deep: '`foo:bar`' }, { foo: { bar: 'zed' } })
-    expect(out).equal({ deep: 'zed' })
-
-    out = Inks({ deep: '`$.foo`' }, { foo: { bar: 'zed' } })
-    expect(out).equal({ deep: { bar: 'zed' } })
-
-    const context = {
-      red: { foo: 1, bar: 'zed' },
-      green: { fizz: { buzz: 'FRED' } },
-    }
-    const template =
-      'Lorem `red:foo` ipsum `$.red.foo + $.red.bar.length` dolor `green:fizz.buzz` sit \\` amet.'
-    const result = Inks(template, context)
-
-    expect(result).equal('Lorem 1 ipsum 4 dolor FRED sit ` amet.')
-  })
+  it('readme', async () => {})
 
   it('happy', async () => {
-    expect(Inks('foo')).equal('foo')
-    expect(Inks('f`oo')).equal('f`oo')
-    expect(Inks('`foo')).equal('`foo')
-    expect(Inks('foo`')).equal('foo`')
-    expect(Inks('`foo:a`')).equal(null)
-    expect(Inks('`foo:a`', { foo: {} })).equal(null)
-    expect(Inks('`foo:a`', { foo: { a: 'z' } })).equal('z')
-    expect(Inks('`foo:a`', { foo: { a: 1 } })).equal(1)
-    expect(Inks('`foo:a`', { foo: { a: { x: 1 } } })).equal({ x: 1 })
-    expect(Inks('`foo:a`~`foo:b`', { foo: { a: 'z', b: 'y' } })).equal('z~y')
-    expect(Inks('`foo:a`', { foo: { a: 1 } })).equal(1)
-    expect(Inks('`foo:a`', { foo: { a: { b: 1 } } })).equal({ b: 1 })
-    expect(Inks('|`foo:a`|', { foo: { a: { b: 1 } } })).equal('|{"b":1}|')
-    expect(Inks('|`foo:a`|', { foo: { a: 'x' } })).equal('|x|')
-    expect(Inks('|`foo:a`|', { foo: { a: 9 } })).equal('|9|')
-    expect(Inks('`bar:a`', { foo: { a: 1 } })).equal(null)
-    expect(Inks('`foo:b`', { foo: { a: 1 } })).equal(null)
-    expect(Inks('`1+1`', {})).equal(2)
-    expect(Inks('`1+1`')).equal(2)
-    expect(Inks('`$.a`x`$.b`y`$.c`', { a: '', b: '', c: '' })).equal('xy')
-    expect(Inks('q`$.a`x`$.b`y`$.c`w', { a: '', b: '', c: '' })).equal('qxyw')
-
-    // escaped string literals
-    expect(Inks('`"a"`')).equal('a')
-    expect(Inks('`"\\`a\\`"`')).equal('`a`')
-  })
-
-  it('walk', async () => {
-    expect(Inks({ a: 'b' })).equal({ a: 'b' })
-    expect(Inks({ a: { b: 'c' } })).equal({ a: { b: 'c' } })
-    expect(Inks(['a', 'b'])).equal(['a', 'b'])
-    expect(Inks({ c: ['a', { b: ['d'] }] })).equal({ c: ['a', { b: ['d'] }] })
-
-    var c0 = { x: 1, y: 'q', z: { w: [2] }, k: [3, { e: 4 }] }
-    expect(Inks('`$.x`', c0)).equal(1)
-    expect(Inks({ a: '`$.x`' }, c0)).equal({ a: 1 })
-    expect(Inks({ a: { b: '`$.x`' } }, c0)).equal({ a: { b: 1 } })
-    expect(Inks(['s', '`$.x`', { d: 1 }], c0)).equal(['s', 1, { d: 1 }])
-    expect(Inks(['s', { x: '`$.x`' }, { d: 1 }], c0)).equal([
-      's',
-      { x: 1 },
-      { d: 1 },
-    ])
-
-    var g = () => {}
-    var b = Symbol('b')
-
-    var BigIntFunc = function (x) {
-      return x
-    }
-
-    expect(
-      Inks(
-        {
-          a: '`$.x`',
-          b: b,
-          c: ('function' === typeof BigInt ? BigInt : BigIntFunc)(1),
-          d: true,
-          e: null,
-          f: void 0,
-          g: g,
-        },
-        c0
-      )
-    ).equal({
-      a: 1,
-      b: b,
-      c: ('function' === typeof BigInt ? BigInt : BigIntFunc)(1),
-      d: true,
-      e: null,
-      f: undefined,
-      g: g,
-    })
-  })
-
-  it('exclude', async () => {
-    expect(
-      Inks(
-        {
-          a: 1,
-          b: '`$.b`',
-          c: '`$.c`',
-          d: { e: '`$.e`' },
-          f: null,
-          g: { h: '`$.h`' },
-        },
-        { b: 2, c: 3, e: 4 },
-        {
-          exclude: (k, v) => {
-            return k === 'c' || k === 'e' || !!v.h
-          },
-        }
-      )
-    ).equal({
-      a: 1,
-      b: 2,
-      c: '`$.c`',
-      d: { e: '`$.e`' },
-      f: null,
-      g: { h: '`$.h`' },
-    })
+    let g0 = Gasta()
+    expect(g0).exists()
   })
 })
 

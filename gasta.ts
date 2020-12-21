@@ -5,15 +5,12 @@
 
 'use strict'
 
-
 module.exports = Gasta
-
 
 function Gasta() {
   return new GastaImpl(...arguments)
 }
 
-
 class GastaImpl {
-  constructor(...rest: any[]) { }
+  constructor(...rest: any[]) {}
 }
