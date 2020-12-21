@@ -1,0 +1,49 @@
+{
+  "name": "gasta",
+  "version": "0.1.0",
+  "description": "Gasta",
+  "main": "dist/gasta.js",
+  "browser": "dist/gasta.min.js",
+  "types": "dist/gasta.d.js",
+  "scripts": {
+    "watch": "tsc -w -d",
+    "build": "tsc -d && cp dist/gasta.js dist/gasta.min.js && browserify -o dist/gasta.min.js -e dist/gasta.js -s Gasta -im -i assert -p tinyify",
+    "test": "lab -v -L -P test -t 100 --sourcemaps --transform node_modules/lab-transform-typescript -r console -o stdout -r html -o test/coverage.html -r lcov -o test/lcov.info",
+    "test-web": "browserify -o test-web/test-web.js -e test/gasta.test.js -s Gasta -im -i assert -i @hapi/lab && open test-web/index.html",
+    "prettier": "prettier --write --no-semi --single-quote *.ts *.js test/*.js",
+    "clean": "rm -rf node_modules yarn.lock package-lock.json",
+    "reset": "npm run clean && npm i && npm run build && npm test",
+    "repo-tag": "REPO_VERSION=`node -e \"console.log(require('./package').version)\"`; echo TAG: v$REPO_VERSION && git commit -a -m v$REPO_VERSION && git push && git tag v$REPO_VERSION && git push --tags;",
+    "repo-publish-quick": "npm run prettier && npm run build && npm test && npm run test-web && npm run repo-tag && npm publish --registry http://registry.npmjs.org",
+    "repo-publish": "npm run clean && npm i && npm run repo-publish-quick"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rjrodger/gasta.git"
+  },
+  "keywords": [],
+  "author": "Richard Rodger richardrodger.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rjrodger/gasta/issues"
+  },
+  "homepage": "https://github.com/rjrodger/gasta#readme",
+  "devDependencies": {
+    "@hapi/code": "^8.0.2",
+    "@hapi/lab": "^24.1.0",
+    "@types/node": "^14.14.14",
+    "browserify": "^17.0.0",
+    "hapi-lab-shim": "0.0.2",
+    "lab-transform-typescript": "^3.0.1",
+    "prettier": "^2.2.1",
+    "tinyify": "^3.0.0",
+    "typescript": "^4.1.3"
+  },
+  "files": [
+    "README.md",
+    "LICENSE",
+    "gasta.*",
+    "*.json",
+    "dist"
+  ]
+}
