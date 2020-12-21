@@ -10,6 +10,7 @@ module.exports = {
   },
   rules: {
     'no-console': 0,
+    'no-self-assign': 0,
   },
   globals: {
     Promise: 'readonly',
